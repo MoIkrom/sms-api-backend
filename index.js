@@ -21,6 +21,16 @@ app.post("/sms", (req, res) => {
             <Message>Terima kasih, pesan Anda telah diterima.</Message>
         </Response>
     `);
+
+  // Route untuk mengarahkan dari "/" ke "/sms"
+  app.get("/", (req, res) => {
+    try {
+      res.redirect("/sms");
+    } catch (error) {
+      console.error("Error:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  });
 });
 app.get("/sms", (req, res) => {
   try {
