@@ -1,46 +1,32 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-// Middleware untuk menguraikan application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+// Middleware untuk menguraikan body dari request POST yang menggunakan application/x-www-form-urlencoded dan JSON
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-// Endpoint untuk menerima SMS
+// Route untuk menangani POST request dari webhook
 app.post("/sms", (req, res) => {
-  const from = req.body.From; // Nomor pengirim
-  const to = req.body.To; // Nomor penerima (nomor server Anda)
-  const message = req.body.Body; // Pesan SMS
-
-  console.log(`SMS diterima dari ${from}: ${message}`);
-
-  // Kirim respon ke pengirim (optional)
-  res.send(`
-        <Response>
-            <Message>Terima kasih, pesan Anda telah diterima.</Message>
-        </Response>
-    `);
-
-  // Route untuk mengarahkan dari "/" ke "/sms"
-  app.get("/", (req, res) => {
-    try {
-      res.redirect("/sms");
-    } catch (error) {
-      console.error("Error:", error);
-      res.status(500).send("Internal Server Error");
-    }
-  });
-});
-app.get("/sms", (req, res) => {
   try {
-    // console.log(`SMS diterima dari`);
-    console.log(res);
-    // console.log("Query parameters:", req.query);
+    const data = JSON.stringify(req.body);
+    const filePath = path.join(__dirname, "sms_inbox.dat");
 
-    res.send("GET request diterima");
+    fs.appendFile(filePath, data + "\n", (err) => {
+      if (err) {
+        console.error("Error writing to file", err);
+        return res.status(500).send("Internal Server Error");
+      }
+      console.log("Data berhasil disimpan:", data);
+      res.status(200).send("Data berhasil disimpan");
+    });
   } catch (error) {
-    console.log(error);
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
