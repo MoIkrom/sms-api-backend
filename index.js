@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 // Middleware untuk menguraikan application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
