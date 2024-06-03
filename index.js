@@ -1,5 +1,5 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require("express");
+const bodyParser = require("body-parser");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -8,36 +8,33 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Endpoint untuk menerima SMS
-app.post('/sms', (req, res) => {
-    const from = req.body.From; // Nomor pengirim
-    const to = req.body.To; // Nomor penerima (nomor server Anda)
-    const message = req.body.Body; // Pesan SMS
+app.post("/sms", (req, res) => {
+  const from = req.body.From; // Nomor pengirim
+  const to = req.body.To; // Nomor penerima (nomor server Anda)
+  const message = req.body.Body; // Pesan SMS
 
-    console.log(`SMS diterima dari ${from}: ${message}`);
+  console.log(`SMS diterima dari ${from}: ${message}`);
 
-    // Kirim respon ke pengirim (optional)
-    res.send(`
+  // Kirim respon ke pengirim (optional)
+  res.send(`
         <Response>
             <Message>Terima kasih, pesan Anda telah diterima.</Message>
         </Response>
     `);
 });
-app.get('/sms', (req, res) => {
-    
+app.get("/sms", (req, res) => {
+  try {
+    // console.log(`SMS diterima dari`);
+    console.log(res);
+    // console.log("Query parameters:", req.query);
 
-    console.log(`SMS diterima dari`);
-
-    // Kirim respon ke pengirim (optional)
-    res.send(`
-        <Response>
-            <Message>Pesan Anda telah diterima.</Message>
-        </Response>
-    `);
-
-
+    res.send("GET request diterima");
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // Menjalankan server
 app.listen(port, () => {
-    console.log(`Server berjalan di http://localhost:${port}`);
+  console.log(`Server berjalan di http://localhost:${port}`);
 });
