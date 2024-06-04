@@ -16,6 +16,8 @@ app.use(bodyParser.json());
 app.use(
   cors({
     origin: "http://localhost:5173", // Mengizinkan asal tertentu
+    methods: ["GET", "POST", "OPTIONS"], // Mengizinkan metode tertentu
+    allowedHeaders: ["Content-Type", "Authorization"], // Mengizinkan header tertentu
   })
 );
 
