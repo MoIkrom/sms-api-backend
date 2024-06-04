@@ -13,7 +13,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Middleware CORS
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Mengizinkan asal tertentu
+  })
+);
+
+app.options("*", cors()); // Menangani permintaan preflight secara manual
 
 app.post("/webhook", (req, res) => {
   // console.log("Received webhook:", req.body);
