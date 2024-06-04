@@ -10,24 +10,9 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Route untuk menangani POST request dari webhook
-app.post("/sms", (req, res) => {
-  try {
-    const data = JSON.stringify(req.body);
-    const filePath = path.join(__dirname, "sms_inbox.dat");
-
-    fs.appendFile(filePath, data + "\n", (err) => {
-      if (err) {
-        console.error("Error writing to file", err);
-        return res.status(500).send("Internal Server Error");
-      }
-      console.log("Data berhasil disimpan:", data);
-      res.status(200).send("Data berhasil disimpan");
-    });
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
-  }
+app.post("/webhook", (req, res) => {
+  console.log("Received webhook:", req.body);
+  res.sendStatus(200);
 });
 
 // Menjalankan server
